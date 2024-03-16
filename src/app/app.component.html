@@ -1,0 +1,30 @@
+<div class="centered">
+    <div class="game">
+        <div class="stats">
+            <h3>Score: {{ gameService.score.getValue() }}</h3>
+            <h3>Level: {{ gameService.level }}</h3>
+        </div>
+        <div id="display">
+            <div class="row" *ngFor="let row of gameService.board; index as i">
+                <div *ngFor="let pixel of gameService.board[i]" 
+                    [ngClass]="pixel.value === 0 ? 'pixel' : 'block'" 
+                    [ngStyle]="{
+                        'width': gameService.blockSize + 'px',
+                        'height': gameService.blockSize + 'px',
+                        'background-color': pixel.color,
+                    }"
+                ></div>
+            </div>
+        </div>
+        <div class="controls">
+            <button (click)="startGame()">Play</button>
+        </div>
+    </div>
+</div>
+
+<div class="toast-container">
+    <div [@openClose]="gameService.isToastShown ? 'open' : 'closed'" class="toast">
+        Game Over!
+    </div>
+
+</div>
