@@ -3,7 +3,8 @@ const config = {
     {
       color: '#eab308',
       matrix: [
-        [2]
+        [2, 2],
+        [2, 2]
       ],
     },
     {

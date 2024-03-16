@@ -9,7 +9,6 @@ export enum KEY_CODE {
   DOWN_ARROW = 'ArrowDown',
   RIGHT_ARROW = 'ArrowRight',
   LEFT_ARROW = 'ArrowLeft',
-  SPACE = ' '
 }
 
 @Component({
@@ -52,6 +51,7 @@ export class AppComponent {
 
   @HostListener('window:keydown', ['$event'])
   handleKeyDown(event: KeyboardEvent) {
+    if (!this.gameService.isRunning) return;
     switch (event.key) {
     case KEY_CODE.DOWN_ARROW:
       event.preventDefault();
@@ -68,7 +68,7 @@ export class AppComponent {
       this.gameService.moveTetromino('RIGHT');
       break;
     
-    case KEY_CODE.SPACE:
+    case KEY_CODE.UP_ARROW:
       event.preventDefault();
       this.gameService.rotateTetromino();
       break;
