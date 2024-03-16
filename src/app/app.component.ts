@@ -52,6 +52,7 @@ export class AppComponent {
 
   @HostListener('window:keydown', ['$event'])
   handleKeyDown(event: KeyboardEvent) {
+    if (!this.gameService.isRunning) return;
     switch (event.key) {
     case KEY_CODE.DOWN_ARROW:
       event.preventDefault();

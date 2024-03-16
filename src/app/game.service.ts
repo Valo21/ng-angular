@@ -30,6 +30,8 @@ export class GameService {
   public interval: ReturnType<typeof setInterval> | null = null; 
   public music = new Audio('/assets/Tetris.mp3');
 
+  public isRunning = false;
+
   public isToastShown = false;
 
 
@@ -37,6 +39,7 @@ export class GameService {
   }
 
   public initialize() {
+    this.isRunning = true;
     this.level = 1;
     this.score.next(0);
     this.board = config.generateBoard();
@@ -103,6 +106,8 @@ export class GameService {
   public gameOver(){
     if (this.interval) clearInterval(this.interval);
     this.isToastShown = true;
+    this.isRunning = false;
+    this.music.pause();
     setTimeout(()=> {
       this.isToastShown = false;
     }, 2000);
@@ -140,6 +145,17 @@ export class GameService {
   public rotateTetromino(){
     this.clearPreviusPixel(this.tetromino$.getValue());
     this.tetromino$.getValue().shape = rotateMatrix(this.tetromino$.getValue().shape);
+    let steps = 0;
+    this.tetromino$.getValue().shape.forEach((row, y) => {
+      row.forEach((value, x) => {
+        if (value) {
+          if (!this.board[this.tetromino$.getValue().y + y][this.tetromino$.getValue().x + x]){
+            steps++;
+          }
+        }
+      });
+    });
+    this.tetromino$.getValue().x -= steps;
   }
 
   public moveTetromino(direction: 'DOWN' | 'LEFT' | 'RIGHT') {
