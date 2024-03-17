@@ -6,8 +6,8 @@
         </div>
         <div id="display">
             <div class="row" *ngFor="let row of gameService.board; index as i">
-                <div *ngFor="let pixel of gameService.board[i]" 
-                    [ngClass]="pixel.value === 0 ? 'pixel' : 'block'" 
+                <div *ngFor="let pixel of gameService.board[i]"
+                    [ngClass]="pixel.value === 0 ? 'pixel' : 'block'"
                     [ngStyle]="{
                         'width': gameService.blockSize + 'px',
                         'height': gameService.blockSize + 'px',
@@ -17,7 +17,21 @@
             </div>
         </div>
         <div class="controls">
-            <button (click)="startGame()">Play</button>
+          <div class="controls-movement">
+            <button (click)="gameService.rotateTetromino()">
+              <ng-icon name="heroArrowPath"></ng-icon>
+            </button>
+            <button (click)="gameService.moveTetromino('DOWN', true)">
+              <ng-icon name="heroArrowDown"></ng-icon>
+            </button>
+            <button (click)="gameService.moveTetromino('LEFT')">
+              <ng-icon name="heroArrowLeft"></ng-icon>
+            </button>
+            <button (click)="gameService.moveTetromino('RIGHT')">
+              <ng-icon name="heroArrowRight"></ng-icon>
+            </button>
+          </div>
+          <button (click)="startGame()" class="button-play">Play</button>
         </div>
     </div>
 </div>
@@ -26,5 +40,4 @@
     <div [@openClose]="gameService.isToastShown ? 'open' : 'closed'" class="toast">
         Game Over!
     </div>
-
 </div>

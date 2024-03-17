@@ -20,7 +20,7 @@
             display: flex;
             .pixel {
                 background-color: #0ea5e9;
-                border: 1.5px solid #0ea5e9;
+                border: 1.5px solid #1193c9;
             }
             .block {
                 border: 1.5px solid #3f3f3f;
@@ -31,6 +31,19 @@
         display: flex;
         margin-top: 20px;
         justify-content: center;
+        flex-direction: column;
+        .controls-movement {
+            display: none;
+            justify-content: center;
+            margin-bottom: 40px;
+            gap: 30px;
+            button {
+                padding: 10px 15px;
+            }
+            @media screen and (max-width: 920px) {
+                display: flex;
+            }
+        }
     }
 
     .stats {
@@ -57,22 +70,20 @@
 }
 
 button {
-    border: unset;
-    cursor: pointer;
-    outline: unset;
-    padding: 10px 15px;
-    border-radius: 5px;
-    font-size: 1em;
-    transition: transform;
-    transition-duration: 300ms;
+  border: unset;
+  cursor: pointer;
+  outline: unset;
+  border-radius: 5px;
+  font-size: 1em;
 }
-
-button:hover {
-    transform: scale(1.1);
+.button-play {
+  padding: 10px 15px;
+  transition: transform;
+  transition-duration: 300ms;
 }
 
 button:active {
-    transform: scale(0.95);
+    transform: scale(0.90);
 }
 
 .toast-container {

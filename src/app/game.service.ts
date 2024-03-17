@@ -27,7 +27,7 @@ export class GameService {
   public canvasHeight: number = config.boardHeight * this.blockSize;
 
   public tetromino$ = new BehaviorSubject<Tetromino>(new Tetromino());
-  public interval: ReturnType<typeof setInterval> | null = null; 
+  public interval: ReturnType<typeof setInterval> | null = null;
   public music = new Audio('/assets/Tetris.mp3');
 
   public isRunning = false;
@@ -62,7 +62,7 @@ export class GameService {
       }
     });
 
-    const draw = () => { 
+    const draw = () => {
       this.tetromino$.getValue().shape.forEach((row, y) => {
         row.forEach((value, x) => {
           if (value) {
@@ -97,7 +97,7 @@ export class GameService {
       return row.find((value, x)=> {
         return (
           value !== 0 &&
-          this.board[y + tetromino.y]?.[tetromino.x + x]?.value !== 0 && 
+          this.board[y + tetromino.y]?.[tetromino.x + x]?.value !== 0 &&
           !(this.board[y + tetromino.y]?.[tetromino.x + x]?.value === 2)
         );
       });
@@ -131,7 +131,7 @@ export class GameService {
     });
 
   }
-  
+
   public clearPreviusPixel(tetromino: Tetromino) {
     tetromino.shape.forEach((row, y) => {
       row.forEach((value, x) => {
@@ -144,6 +144,7 @@ export class GameService {
   }
 
   public rotateTetromino(){
+    if (!this.isRunning) return;
     this.clearPreviusPixel(this.tetromino$.getValue());
     this.tetromino$.getValue().shape = rotateMatrix(this.tetromino$.getValue().shape);
     let steps = 0;
@@ -159,7 +160,8 @@ export class GameService {
     this.tetromino$.getValue().x -= steps;
   }
 
-  public moveTetromino(direction: 'DOWN' | 'LEFT' | 'RIGHT') {
+  public moveTetromino(direction: 'DOWN' | 'LEFT' | 'RIGHT', upScore?: boolean) {
+    if (!this.isRunning) return;
     const tetromino = this.tetromino$.getValue();
     const tHelper: Tetromino = Object.assign({}, tetromino);
     switch (direction) {
@@ -204,11 +206,15 @@ export class GameService {
 
     this.clearPreviusPixel(tetromino);
     this.tetromino$.next(tHelper);
+
+    if(direction === 'DOWN' && upScore){
+      this.score.next(this.score.getValue() + 2);
+    }
   }
 }
 
 
-/* 
+/*
 
 public initialize(canvas: HTMLCanvasElement) {
     this.board = config.board;
@@ -228,7 +234,7 @@ public initialize(canvas: HTMLCanvasElement) {
       }
       this.context2D.fillStyle = '#87ceeb';
       this.context2D.fillRect(0, 0, config.boardWidth, config.boardHeight);
-  
+
       this.board.forEach((row, y) => {
         row.forEach((pixel, x) => {
           if (pixel.value === 1) {
@@ -237,7 +243,7 @@ public initialize(canvas: HTMLCanvasElement) {
           }
         });
       });
-      
+
       this.tetromino$.getValue().shape.forEach((row, y) => {
         row.forEach((value, x) => {
           if (value) {
@@ -247,7 +253,7 @@ public initialize(canvas: HTMLCanvasElement) {
         });
       });
     };
-  
+
     function update() {
       draw();
       window.requestAnimationFrame(update);

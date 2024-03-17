@@ -3,6 +3,8 @@ import { CommonModule } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
 import { GameService } from './game.service';
 import { animate, state, style, transition, trigger } from '@angular/animations';
+import {NgIcon, provideIcons} from "@ng-icons/core";
+import {heroArrowDown, heroArrowLeft, heroArrowRight, heroArrowPath} from "@ng-icons/heroicons/outline";
 
 export enum KEY_CODE {
   UP_ARROW = 'ArrowUp',
@@ -14,9 +16,10 @@ export enum KEY_CODE {
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, RouterOutlet],
+  imports: [CommonModule, RouterOutlet, NgIcon],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
+  providers: [provideIcons({ heroArrowDown, heroArrowLeft, heroArrowRight, heroArrowPath })],
   animations: [
     trigger('openClose', [
       // ...
@@ -51,25 +54,21 @@ export class AppComponent {
 
   @HostListener('window:keydown', ['$event'])
   handleKeyDown(event: KeyboardEvent) {
-    if (!this.gameService.isRunning) return;
+    event.preventDefault();
     switch (event.key) {
     case KEY_CODE.DOWN_ARROW:
-      event.preventDefault();
-      this.gameService.moveTetromino('DOWN');
-      this.gameService.score.next(this.gameService.score.getValue() + 2);
+      this.gameService.moveTetromino('DOWN', true);
       break;
     case KEY_CODE.LEFT_ARROW:
-      event.preventDefault();
       this.gameService.moveTetromino('LEFT');
       break;
-    
+
     case KEY_CODE.RIGHT_ARROW:
       event.preventDefault();
       this.gameService.moveTetromino('RIGHT');
       break;
-    
+
     case KEY_CODE.UP_ARROW:
-      event.preventDefault();
       this.gameService.rotateTetromino();
       break;
     default:
